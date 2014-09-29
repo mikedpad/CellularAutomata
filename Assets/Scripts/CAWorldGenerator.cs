@@ -33,7 +33,8 @@ using System.Collections;
 using UnityEngine;
 
 public class CAWorldGenerator : MonoBehaviour {
-	private bool[,] world;
+	[HideInInspector]
+	public bool[,] world;
 
 	[Header("Cellular Automata World Generator")]
 	public int worldWidth = 32;

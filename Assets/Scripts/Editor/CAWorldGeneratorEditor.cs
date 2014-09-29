@@ -106,7 +106,7 @@ public class CAWorldGeneratorEditor : Editor {
 		string prefabName = System.IO.Path.GetFileNameWithoutExtension(prefabPath);
 		string prefabFolder = System.IO.Path.GetDirectoryName(prefabPath) + "/";
 		string materialPath = prefabFolder + prefabName + ".mat";
-		string texturePath = prefabFolder + prefabName + ".png";
+		string texturePath = prefabFolder + prefabName + "_ca.png";
 
 		// Create GameObject
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);		// GameObject with Quad Mesh Primitive
@@ -121,7 +121,6 @@ public class CAWorldGeneratorEditor : Editor {
 		// Create Texture
 		Texture2D texture = CreateTexture(1, 1, new Color32[] { Color.blue });	// Solid blue texture
 		SaveTextureToDisk(texture, texturePath);								// Save texture to disk
-		DestroyImmediate(texture);												// Destroy temporary texture (avoids Editor leaks)
 
 		// Create Material
 		Material material = new Material(Shader.Find("Sprites/Default"));
@@ -147,8 +146,8 @@ public class CAWorldGeneratorEditor : Editor {
 	/// </summary>
 	/// <param name="width">Specified width of the texture</param>
 	/// <param name="height">Specified height of the texture</param>
-	/// <param name="pixels">The pixels of the image</param>
-	/// <returns>The created Texture2D</returns>
+	/// <param name="pixels">A Color32 array of the pixels</param>
+	/// <returns>A shiny, new Texture2D</returns>
 	private static Texture2D CreateTexture(int width, int height, Color32[] pixels) {
 		Texture2D texture = new Texture2D(width, height);
 		texture.SetPixels32(pixels);
@@ -157,14 +156,21 @@ public class CAWorldGeneratorEditor : Editor {
 	}
 
 	/// <summary>
-	/// Writes a texture to disk. Warning! This will overwrite any existing texture.
+	/// Writes a texture to disk. Warning! This will overwrite any existing texture used in the material.
 	/// </summary>
 	/// <param name="texture">The texture that will be saved to disk.</param>
 	/// <param name="texturePath">The location where the texture will be saved.</param>
 	private static void SaveTextureToDisk(Texture2D texture, string texturePath) {
+		// PNG Encoding
 		byte[] textureBytes = texture.EncodeToPNG();
+
+		// Write Texture to File
 		if (textureBytes != null)
 			System.IO.File.WriteAllBytes(texturePath, textureBytes);
+
+		// Destroy the temporary texture
+		DestroyImmediate(texture);
+
 		AssetDatabase.Refresh();
 	}
 
@@ -173,17 +179,17 @@ public class CAWorldGeneratorEditor : Editor {
 	/// The supplied texture is then destroyed to prevent leaks and the material
 	/// is then assigned the new texture loaded from asset folder.
 	/// </summary>
-	/// <param name="texture"></param>
 	private void UpdateTexture() {
-		// Write generated texture in previous texture's place, destroy old texture
-		Texture2D texture = (Texture2D) _generator.renderer.sharedMaterial.mainTexture;
-		SaveTextureToDisk(texture, _texturePath);
-		DestroyImmediate(texture);
+		Material material = _generator.renderer.sharedMaterial;
+		Texture2D texture = (Texture2D) material.mainTexture;
+
+		SaveTextureToDisk(texture, _texturePath);					// Save Texture To Disk
+
 
 		// Load texture from disk and assign to material
-		_generator.renderer.sharedMaterial.mainTexture = (Texture2D) AssetDatabase.LoadAssetAtPath(_texturePath, typeof(Texture2D));
-		_generator.renderer.sharedMaterial.mainTexture.filterMode = FilterMode.Point;
-		_generator.renderer.sharedMaterial.mainTexture.wrapMode = TextureWrapMode.Clamp;
+		material.mainTexture = (Texture2D) AssetDatabase.LoadAssetAtPath(_texturePath, typeof(Texture2D));
+		material.mainTexture.filterMode = FilterMode.Point;
+		material.mainTexture.wrapMode = TextureWrapMode.Clamp;
 	}
 	#endregion Texture Update
 }
