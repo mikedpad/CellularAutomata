@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: TestWorld
+  m_Name: caMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: a7a98db4452584a298ae00bb032b48b9, type: 2}
+  - {fileID: 2100000, guid: e943dbb6ece2510438b7947ad0f0490d, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -68,14 +68,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ad4ce6a8511ac469913f902a8d6113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldWidth: 32
-  worldHeight: 32
-  aliveColor: {r: 1, g: 1, b: 1, a: 1}
-  deadColor: {r: 0, g: 0, b: 0, a: 1}
-  chanceToStartAlive: .400000006
-  birthLimit: 4
-  deathLimit: 3
-  numberOfSteps: 2
+  _width: 128
+  _height: 128
+  _wallSpawnChance: .400000006
+  _numberOfSteps: 3
+  _birthLimit: 4
+  _deathLimit: 3
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
