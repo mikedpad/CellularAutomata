@@ -22,7 +22,7 @@ public abstract class ProceduralMapEditor : Editor {
 		_map = (ProceduralMap) target;
 
 		if (_material == null)
-			_material = ((ProceduralMap) target).renderer.sharedMaterial;
+			_material = ((ProceduralMap) target).GetComponent<Renderer>().sharedMaterial;
 		if (_texturePath == null)
 			_texturePath = AssetDatabase.GetAssetPath(_material.mainTexture);
 
@@ -143,7 +143,7 @@ public abstract class ProceduralMapEditor : Editor {
 		// Create GameObject
 		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);		// GameObject with Quad Mesh Primitive
 		go.name = objName;													// Set name of GameObject from Prefab
-		DestroyImmediate(go.collider);										// Remove the default Mesh Collider
+		DestroyImmediate(go.GetComponent<Collider>());										// Remove the default Mesh Collider
 		go.AddComponent<T>();												// Add script component
 
 		// Create Prefab
@@ -153,7 +153,7 @@ public abstract class ProceduralMapEditor : Editor {
 		// Create Material
 		Material material = new Material(Shader.Find("Sprites/Default"));
 		material.mainTexture = CreateAndSaveTexture(1, 1, new Color32[] { Color.blue }, texturePath);
-		go.renderer.sharedMaterial = material;
+		go.GetComponent<Renderer>().sharedMaterial = material;
 
 		// Create Material Asset
 		AssetDatabase.CreateAsset(material, materialPath);

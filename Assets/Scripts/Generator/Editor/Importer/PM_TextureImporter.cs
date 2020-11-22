@@ -11,7 +11,7 @@ public class PM_TextureImporter : AssetPostprocessor {
 			return;
 
 		TextureImporter textureImporter = (TextureImporter) assetImporter;
-		textureImporter.textureType = TextureImporterType.Image;
+		textureImporter.textureType = TextureImporterType.Default;
 		textureImporter.textureFormat = TextureImporterFormat.AutomaticTruecolor;
 		textureImporter.filterMode = FilterMode.Point;
 		textureImporter.wrapMode = TextureWrapMode.Clamp;
